@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 import redis
 
 app = Flask(__name__)
@@ -9,13 +9,13 @@ r = redis.Redis(host=redis_host, port=redis_port, db=0)
 
 @app.route('/')
 def welcome():
-    return 'Welcome to the challenge!'
+    return render_template('index.html')
 
 @app.route('/count')
 def count():
     # Increment the count in Redis
     count = r.incr('vists')
-    return f'this page has been visted {count} times.'
+    return render_template('count.html', count=count)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
+    app.run(host='0.0.0.0', port=5002 ,debug=True)
